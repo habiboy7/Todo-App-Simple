@@ -1,83 +1,74 @@
 package com.example.todolist.uai.home
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.todolist.data.entitiy.TaskEntity
+import com.example.todolist.uai.common.EditTaskDialog
+import com.example.todolist.uai.common.TaskItem
 import com.example.todolist.viewmodel.TaskViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodoScreen(vm: TaskViewModel, onLogout: () -> Unit) {
+fun TodosScreen(vm: TaskViewModel, nav: NavController) {
     val tasks by vm.tasks.collectAsState()
+    // State untuk Dialog Edit
+    var taskToEdit by remember { mutableStateOf<TaskEntity?>(null) }
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("My Todo") }, actions = {
-                IconButton(onClick = onLogout) { Text("Logout") }
-            })
-        },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                text = { Text("Add") },
-                icon = { Icon(Icons.Default.Add, contentDescription = "Add") },
-                onClick = {
-                    vm.addTask("Task from FAB ${System.currentTimeMillis()}", null)
+            TopAppBar(
+                title = { Text("Daftar Tugas (Edit & Hapus)") },
+                navigationIcon = {
+                    IconButton(onClick = { nav.popBackStack() }) {
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "Kembali ke Dashboard")
+                    }
                 }
             )
         }
     ) { padding ->
-        LazyColumn(modifier = Modifier.padding(padding).fillMaxSize()) {
-            items(tasks) { task ->
-                TaskItem(task, onToggle = { vm.toggleDone(it) }, onDelete = { vm.deleteTask(it) })
-            }
-        }
-    }
-}
-
-@Composable
-fun TaskItem(task: TaskEntity, onToggle: (TaskEntity) -> Unit, onDelete: (TaskEntity) -> Unit) {
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .padding(8.dp)
-    ) {
-        Row(modifier = Modifier.padding(12.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(task.title, style = MaterialTheme.typography.titleMedium)
-                task.description?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
-            }
-            Column {
-                Text(if (task.isDone) "Done" else "Open")
-                Spacer(Modifier.height(8.dp))
-                Row {
-                    Text("Toggle", modifier = Modifier.clickable { onToggle(task) }.padding(8.dp))
-                    Text("Delete", modifier = Modifier.clickable { onDelete(task) }.padding(8.dp))
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize()
+        ) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(top = 8.dp)
+            ) {
+                item {
+                    Text(
+                        text = "Klik item untuk mengubah status Selesai/Belum Selesai.",
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                    )
+                }
+                items(tasks) { task ->
+                    TaskItem(
+                        task = task,
+                        onToggle = { vm.toggleDone(it) },
+                        onEditClick = { taskToEdit = it },
+                        onDelete = { vm.deleteTask(it) },
+                    )
                 }
             }
         }
+    }
+
+    // Dialog Edit (muncul di atas semua konten)
+    taskToEdit?.let { task ->
+        EditTaskDialog(
+            task = task,
+            onDismiss = { taskToEdit = null },
+            onSave = { newTitle, newDesc -> vm.updateTask(task, newTitle, newDesc) },
+            onDelete = { vm.deleteTask(it) }
+        )
     }
 }
