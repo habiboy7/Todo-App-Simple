@@ -39,14 +39,13 @@ fun DashboardScreen(
     val scope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    // State untuk Dialog Edit (DIHAPUS DARI DASHBOARD)
-    // var taskToEdit by remember { mutableStateOf<TaskEntity?>(null) } // <-- DIHAPUS
+
 
     fun addTaskAndClear() {
         if (newTaskTitle.isNotBlank()) {
             vm.addTask(newTaskTitle)
-            newTaskTitle = "" // Bersihkan input
-            keyboardController?.hide() // Sembunyikan keyboard
+            newTaskTitle = "" 
+            keyboardController?.hide() 
         }
     }
 
@@ -67,7 +66,7 @@ fun DashboardScreen(
                     selected = true,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        // Sudah di Dashboard, tidak perlu navigasi
+                        
                     }
                 )
                 NavigationDrawerItem(
@@ -114,7 +113,7 @@ fun DashboardScreen(
                     .padding(padding)
                     .fillMaxSize()
             ) {
-                // --- Input Cepat di Bawah Navbar ---
+                
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -131,13 +130,13 @@ fun DashboardScreen(
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                         keyboardActions = KeyboardActions(
                             onDone = {
-                                addTaskAndClear() // Aksi saat Enter ditekan
+                                addTaskAndClear() 
                             }
                         )
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(
-                        onClick = { addTaskAndClear() }, // Aksi saat tombol Add diklik
+                        onClick = { addTaskAndClear() }, 
                         enabled = newTaskTitle.isNotBlank(),
                         colors = ButtonDefaults.buttonColors(containerColor = PrimaryBlue)
                     ) {
