@@ -2,9 +2,6 @@
 
 Aplikasi Android Todolist sederhana yang dibangun menggunakan kotlin dan jetpack compose
 
----
-
-
 ## ✨ Fitur Utama
 
 Aplikasi ini menampilkan fitur-fitur inti pengembangan Android modern:
@@ -28,7 +25,6 @@ Aplikasi ini menampilkan fitur-fitur inti pengembangan Android modern:
 - 🧠 **Manajemen Status**  
   Menggunakan ViewModel untuk memisahkan logika bisnis dari UI.
 
----
 
 ## 🛠️ Arsitektur & Teknologi yang Digunakan
 
@@ -43,6 +39,5 @@ Aplikasi ini menampilkan fitur-fitur inti pengembangan Android modern:
 | Dependency Injection | Custom `ViewModelProvider.Factory` |
 | State Management | `ViewModel` + `StateFlow` |
 
----
 
 
