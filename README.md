@@ -19,8 +19,8 @@ Aplikasi ini menampilkan fitur-fitur inti pengembangan Android modern:
   Navigation Compose + Drawer Menu untuk berpindah antar layar.
 
 - 📱 **Dua Layar Fungsional**  
-  - **Dashboard** → Input cepat tugas  
-  - **TodosScreen** → Edit & hapus tugas
+  - **Dashboard** 
+  - **TodosScreen** 
 
 - 🧠 **Manajemen Status**  
   Menggunakan ViewModel untuk memisahkan logika bisnis dari UI.
@@ -36,7 +36,6 @@ Aplikasi ini menampilkan fitur-fitur inti pengembangan Android modern:
 | Database | **Room** |
 | Asinkron | **Coroutines & Flow** |
 | Navigasi | **Navigation Compose** |
-| Dependency Injection | Custom `ViewModelProvider.Factory` |
 | State Management | `ViewModel` + `StateFlow` |
 
 
